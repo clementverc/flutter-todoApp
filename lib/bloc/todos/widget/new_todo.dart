@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_test/bloc/model/task.dart';
+import 'package:flutter_todo_test/bloc/todos/model/todo.dart';
 import 'package:provider/provider.dart';
 
-class AddNewTask extends StatefulWidget {
+class NewTodo extends StatefulWidget {
   final String id;
   final bool isEditMode;
 
-  AddNewTask({
+  NewTodo({
     this.id,
     this.isEditMode,
   });
 
   @override
-  _AddNewTaskState createState() => _AddNewTaskState();
+  _NewTodoState createState() => _NewTodoState();
 }
 
-class _AddNewTaskState extends State<AddNewTask> {
-  Task task;
+class _NewTodoState extends State<NewTodo> {
+  Todo todo;
   String _inputDescription;
   final _formKey = GlobalKey<FormState>();
 
@@ -24,16 +24,16 @@ class _AddNewTaskState extends State<AddNewTask> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       if (!widget.isEditMode) {
-        Provider.of<TaskProvider>(context, listen: false).createNewTask(
-          Task(
+        Provider.of<TodoProvider>(context, listen: false).createNewTodo(
+          Todo(
             id: DateTime.now().toString(),
             description: _inputDescription,
           ),
         );
       } else {
-        Provider.of<TaskProvider>(context, listen: false).editTask(
-          Task(
-            id: task.id,
+        Provider.of<TodoProvider>(context, listen: false).editTodo(
+          Todo(
+            id: todo.id,
             description: _inputDescription,
           ),
         );
@@ -45,9 +45,9 @@ class _AddNewTaskState extends State<AddNewTask> {
   @override
   void initState() {
     if (widget.isEditMode) {
-      task =
-          Provider.of<TaskProvider>(context, listen: false).getById(widget.id);
-      _inputDescription = task.description;
+      todo =
+          Provider.of<TodoProvider>(context, listen: false).getById(widget.id);
+      _inputDescription = todo.description;
     }
     super.initState();
   }

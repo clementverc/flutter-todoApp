@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_test/bloc/model/task.dart';
-import 'package:flutter_todo_test/bloc/widget/list_item.dart';
+import 'package:flutter_todo_test/bloc/todos/model/todo.dart';
+import 'package:flutter_todo_test/bloc/todos/widget/list_item.dart';
 import 'package:provider/provider.dart';
 
 class List extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final taskList = Provider.of<TaskProvider>(context).itemsList;
-    return taskList.length > 0
+    final todoList = Provider.of<TodoProvider>(context).itemsList;
+    return todoList.length > 0
         ? ListView.builder(
-            itemCount: taskList.length,
+            itemCount: todoList.length,
             itemBuilder: (context, index) {
-              return ListItem(taskList[index]);
+              return ListItem(todoList[index]);
             },
           )
         : LayoutBuilder(

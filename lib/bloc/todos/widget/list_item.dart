@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_test/bloc/model/task.dart';
-import 'package:flutter_todo_test/bloc/widget/add_new_task.dart';
-import 'package:flutter_todo_test/bloc/widget/item_text.dart';
+import 'package:flutter_todo_test/bloc/todos/model/todo.dart';
+import 'package:flutter_todo_test/bloc/todos/widget/item_text.dart';
+import 'package:flutter_todo_test/bloc/todos/widget/new_todo.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatefulWidget {
-  final Task task;
+  final Todo todo;
 
-  ListItem(this.task);
+  ListItem(this.todo);
 
   @override
   _ListItemState createState() => _ListItemState();
@@ -18,17 +18,17 @@ class _ListItemState extends State<ListItem> {
   Widget build(BuildContext context) {
     void _checkItem() {
       setState(() {
-        Provider.of<TaskProvider>(context, listen: false)
-            .changeStatus(widget.task.id);
+        Provider.of<TodoProvider>(context, listen: false)
+            .changeStatus(widget.todo.id);
       });
     }
 
     return Dismissible(
-      key: ValueKey(widget.task.id),
+      key: ValueKey(widget.todo.id),
       direction: DismissDirection.endToStart,
       onDismissed: (_) {
-        Provider.of<TaskProvider>(context, listen: false)
-            .removeTask(widget.task.id);
+        Provider.of<TodoProvider>(context, listen: false)
+            .removeTodo(widget.todo.id);
       },
       background: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -64,23 +64,23 @@ class _ListItemState extends State<ListItem> {
                 Row(
                   children: <Widget>[
                     Checkbox(
-                      value: widget.task.isDone,
+                      value: widget.todo.isDone,
                       onChanged: (_) => _checkItem(),
                     ),
                     ItemText(
-                      widget.task.isDone,
-                      widget.task.description,
+                      widget.todo.isDone,
+                      widget.todo.description,
                     ),
                   ],
                 ),
-                if (!widget.task.isDone)
+                if (!widget.todo.isDone)
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (_) => AddNewTask(
-                          id: widget.task.id,
+                        builder: (_) => NewTodo(
+                          id: widget.todo.id,
                           isEditMode: true,
                         ),
                       );

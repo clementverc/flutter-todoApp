@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_test/bloc/widget/add_new_task.dart';
-import 'package:flutter_todo_test/bloc/widget/list.dart';
+import 'package:flutter_todo_test/bloc/todos/widget/list_todos.dart';
+import 'package:flutter_todo_test/bloc/todos/widget/new_todo.dart';
 
 class Homepage extends StatelessWidget {
   @override
@@ -15,7 +15,7 @@ class Homepage extends StatelessWidget {
         onPressed: () {
           showModalBottomSheet(
             context: context,
-            builder: (_) => AddNewTask(isEditMode: false),
+            builder: (_) => NewTodo(isEditMode: false),
           );
         },
       ),
