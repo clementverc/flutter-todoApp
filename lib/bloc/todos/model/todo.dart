@@ -6,12 +6,14 @@ class Todo {
   String description;
   bool isDone;
   DateTime dayDate;
+  TimeOfDay timeOfDay;
 
   Todo({
     @required this.id,
     @required this.description,
     this.isDone = false,
     this.dayDate,
+    this.timeOfDay,
   });
 }
 
@@ -31,6 +33,7 @@ class TodoProvider with ChangeNotifier {
       id: todo.id,
       description: todo.description,
       dayDate: todo.dayDate,
+      timeOfDay: todo.timeOfDay,
     );
     _toDoList.add(newTodo);
     notifyListeners();

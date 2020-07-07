@@ -5,11 +5,13 @@ class ItemText extends StatelessWidget {
   final bool check;
   final String text;
   final DateTime dayDate;
+  final TimeOfDay timeOfDay;
 
   ItemText(
     this.check,
     this.text,
     this.dayDate,
+    this.timeOfDay,
   );
 
   Widget _buildText(BuildContext context) {
@@ -45,6 +47,17 @@ class ItemText extends StatelessWidget {
     );
   }
 
+  Widget _buildTimeText(BuildContext context) {
+    return Text(
+      timeOfDay.format(context),
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: 14,
+        color: check ? Colors.grey : Theme.of(context).primaryColorDark,
+      ),
+    );
+  }
+
   Widget _buildDateText(BuildContext context) {
     return Text(
       DateFormat.yMMMd().format(dayDate).toString(),
@@ -57,8 +70,19 @@ class ItemText extends StatelessWidget {
   }
 
   Widget _buildDateTimeTexts(BuildContext context) {
-    if (dayDate != null) {
+    if (dayDate != null && timeOfDay == null) {
       return _buildDateText(context);
+    } else if (dayDate != null && timeOfDay != null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          _buildDateText(context),
+          SizedBox(
+            width: 10,
+          ),
+          _buildTimeText(context),
+        ],
+      );
     }
     return Container();
     //What would be a better approach?

@@ -20,9 +20,10 @@ class _NewTodoState extends State<NewTodo> {
   Todo todo;
   String _inputDescription;
   DateTime _selectedDate;
+  TimeOfDay _selectedTimeOfDay;
   final _formKey = GlobalKey<FormState>();
 
-  void _pickUserDueDate() {
+  void _pickUserDayDate() {
     showDatePicker(
             context: context,
             initialDate: widget.isEditMode ? _selectedDate : DateTime.now(),
@@ -39,6 +40,20 @@ class _NewTodoState extends State<NewTodo> {
     });
   }
 
+  void _pickUserTimeOfDay() {
+    showTimePicker(
+      context: context,
+      initialTime: widget.isEditMode ? _selectedTimeOfDay : TimeOfDay.now(),
+    ).then((time) {
+      if (time == null) {
+        return;
+      }
+      setState(() {
+        _selectedTimeOfDay = time;
+      });
+    });
+  }
+
   void _validateForm() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -48,6 +63,7 @@ class _NewTodoState extends State<NewTodo> {
             id: DateTime.now().toString(),
             description: _inputDescription,
             dayDate: _selectedDate,
+            timeOfDay: _selectedTimeOfDay,
           ),
         );
       } else {
@@ -56,6 +72,7 @@ class _NewTodoState extends State<NewTodo> {
             id: todo.id,
             description: _inputDescription,
             dayDate: _selectedDate,
+            timeOfDay: _selectedTimeOfDay,
           ),
         );
       }
@@ -70,6 +87,7 @@ class _NewTodoState extends State<NewTodo> {
           Provider.of<TodoProvider>(context, listen: false).getById(widget.id);
       _inputDescription = todo.description;
       _selectedDate = todo.dayDate;
+      _selectedTimeOfDay = todo.timeOfDay;
     }
     super.initState();
   }
@@ -106,13 +124,28 @@ class _NewTodoState extends State<NewTodo> {
             Text('Date'),
             TextFormField(
               onTap: () {
-                _pickUserDueDate();
+                _pickUserDayDate();
               },
               readOnly: true,
               decoration: InputDecoration(
                 hintText: _selectedDate == null
-                    ? 'date'
+                    ? 'Date'
                     : DateFormat.yMMMd().format(_selectedDate).toString(),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text('Heure', style: Theme.of(context).textTheme.subtitle),
+            TextFormField(
+              onTap: () {
+                _pickUserTimeOfDay();
+              },
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: _selectedTimeOfDay == null
+                    ? 'Heure'
+                    : _selectedTimeOfDay.format(context),
               ),
             ),
             Container(
