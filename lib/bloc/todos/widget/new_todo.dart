@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo_test/bloc/todos/model/todo.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NewTodo extends StatefulWidget {
@@ -18,7 +19,25 @@ class NewTodo extends StatefulWidget {
 class _NewTodoState extends State<NewTodo> {
   Todo todo;
   String _inputDescription;
+  DateTime _selectedDate;
   final _formKey = GlobalKey<FormState>();
+
+  void _pickUserDueDate() {
+    showDatePicker(
+            context: context,
+            initialDate: widget.isEditMode ? _selectedDate : DateTime.now(),
+            firstDate: DateTime(2020),
+            lastDate: DateTime(2030))
+        .then((date) {
+      if (date == null) {
+        return;
+      }
+      date = date;
+      setState(() {
+        _selectedDate = date;
+      });
+    });
+  }
 
   void _validateForm() {
     if (_formKey.currentState.validate()) {
@@ -28,6 +47,7 @@ class _NewTodoState extends State<NewTodo> {
           Todo(
             id: DateTime.now().toString(),
             description: _inputDescription,
+            dayDate: _selectedDate,
           ),
         );
       } else {
@@ -35,6 +55,7 @@ class _NewTodoState extends State<NewTodo> {
           Todo(
             id: todo.id,
             description: _inputDescription,
+            dayDate: _selectedDate,
           ),
         );
       }
@@ -48,6 +69,7 @@ class _NewTodoState extends State<NewTodo> {
       todo =
           Provider.of<TodoProvider>(context, listen: false).getById(widget.id);
       _inputDescription = todo.description;
+      _selectedDate = todo.dayDate;
     }
     super.initState();
   }
@@ -77,6 +99,21 @@ class _NewTodoState extends State<NewTodo> {
               onSaved: (value) {
                 _inputDescription = value;
               },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text('Date'),
+            TextFormField(
+              onTap: () {
+                _pickUserDueDate();
+              },
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: _selectedDate == null
+                    ? 'date'
+                    : DateFormat.yMMMd().format(_selectedDate).toString(),
+              ),
             ),
             Container(
               alignment: Alignment.bottomRight,

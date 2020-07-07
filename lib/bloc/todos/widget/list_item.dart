@@ -70,6 +70,7 @@ class _ListItemState extends State<ListItem> {
                     ItemText(
                       widget.todo.isDone,
                       widget.todo.description,
+                      widget.todo.dayDate,
                     ),
                   ],
                 ),

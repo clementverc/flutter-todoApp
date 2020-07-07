@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ItemText extends StatelessWidget {
   final bool check;
   final String text;
+  final DateTime dayDate;
 
   ItemText(
     this.check,
     this.text,
+    this.dayDate,
   );
 
   Widget _buildText(BuildContext context) {
@@ -42,7 +45,21 @@ class ItemText extends StatelessWidget {
     );
   }
 
+  Widget _buildDateText(BuildContext context) {
+    return Text(
+      DateFormat.yMMMd().format(dayDate).toString(),
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: 14,
+        color: check ? Colors.grey : Theme.of(context).primaryColorDark,
+      ),
+    );
+  }
+
   Widget _buildDateTimeTexts(BuildContext context) {
+    if (dayDate != null) {
+      return _buildDateText(context);
+    }
     return Container();
     //What would be a better approach?
   }
